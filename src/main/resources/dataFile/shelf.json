@@ -1,0 +1,62 @@
+[
+  {
+    "name": "Fiction Shelf",
+    "number": 1,
+    "originalBookCount": 0,
+    "remainingBookCount": 0
+  },
+  {
+    "name": "Science Shelf",
+    "number": 2,
+    "originalBookCount": 0,
+    "remainingBookCount": 0
+  },
+  {
+    "name": "History Shelf",
+    "number": 3,
+    "originalBookCount": 0,
+    "remainingBookCount": 0
+  },
+  {
+    "name": "Technology Shelf",
+    "number": 4,
+    "originalBookCount": 0,
+    "remainingBookCount": 0
+  },
+  {
+    "name": "Art Shelf",
+    "number": 5,
+    "originalBookCount": 0,
+    "remainingBookCount": 0
+  },
+  {
+    "name": "Philosophy Shelf",
+    "number": 6,
+    "originalBookCount": 0,
+    "remainingBookCount": 0
+  },
+  {
+    "name": "Cooking Shelf",
+    "number": 7,
+    "originalBookCount": 0,
+    "remainingBookCount": 0
+  },
+  {
+    "name": "Travel Shelf",
+    "number": 8,
+    "originalBookCount": 0,
+    "remainingBookCount": 0
+  },
+  {
+    "name": "Biography Shelf",
+    "number": 9,
+    "originalBookCount": 0,
+    "remainingBookCount": 0
+  },
+  {
+    "name": "Children's Books Shelf",
+    "number": 10,
+    "originalBookCount": 0,
+    "remainingBookCount": 0
+  }
+]

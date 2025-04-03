@@ -1,0 +1,36 @@
+spring:
+  # Application name
+  application:
+    name: springBackend
+
+
+  # DataSource configuration
+  datasource:
+    url: jdbc:postgresql://localhost:5432/MyDatabase
+    username: postgres
+    password: Fatehman@7
+    driver-class-name: org.postgresql.Driver
+
+  # JPA/Hibernate configuration
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+    show-sql: true
+
+
+  # Mail configuration
+#  mail:
+#    host: smtp.gmail.com
+#    port: 587
+#    username: fatehmansoori07@gmail.com
+#    password: tiof ojyt gfjz fqho
+#    properties:
+#      mail:
+#        smtp:
+#          auth: true
+#          starttls:
+#            enable: true

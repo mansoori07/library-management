@@ -1,0 +1,3 @@
+mock-config:
+  mock: true
+  shelfPath: src/main/resources/dataFile/shelf.json
