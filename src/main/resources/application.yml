@@ -13,13 +13,17 @@ spring:
 
   # JPA/Hibernate configuration
   jpa:
+    show-sql: true
     hibernate:
       ddl-auto: update
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
         format_sql: true
-    show-sql: true
+        use_sql_comments: true
+        highlight_sql: true
+        type:
+          format_sql: true
 
 
   # Mail configuration
@@ -34,3 +38,32 @@ spring:
 #          auth: true
 #          starttls:
 #            enable: true
+
+
+
+
+
+
+# logging configuration
+
+logging:
+  file:
+    path: D:\\MY_WORK\\New folder\\logs
+    name: ${logging.file.path}\\application.log
+
+  level:
+    root: INFO
+    org:
+      springframework: WARN
+      hibernate:
+        SQL: DEBUG
+        type:
+          descriptor:
+            sql:
+              BasicBinder: TRACE
+    com.example.library: DEBUG
+
+  logback:
+    rolling-policy:
+      file-name-pattern: ${logging.file.path}\\sql-%d{yyy-MM-dd}_%i.log
+      max-history: 7

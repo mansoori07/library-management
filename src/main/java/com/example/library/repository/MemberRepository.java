@@ -1,29 +1,16 @@
 package com.example.library.repository;
 
 import com.example.library.model.Member;
-import lombok.RequiredArgsConstructor;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 @Repository
-@RequiredArgsConstructor
-public class MemberRepository {
+public interface MemberRepository extends JpaRepository<Member, Long> {
+    List<Member> findByName(String name);
 
-    private final IMemberRepository memberRepository;
+    List<Member> findByPhoneNumber(String phoneNumber);
 
-    public Member findById(Long id){
-        return memberRepository.findById(id)
-                .orElseThrow(()-> new RuntimeException("User not found"));
-    }
-
-    public List<Member> findAll(){
-        return memberRepository.findAll();
-    }
-
-    public List<Member> findByName(String name){
-        return memberRepository.findByName(name)
-                .orElseThrow(()-> new RuntimeException("User with name "+name+" does not exists."));
-    }
-
+    List<Member> findByEmail(String email);
 }

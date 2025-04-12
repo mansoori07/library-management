@@ -12,6 +12,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -25,6 +27,7 @@ public class BookService {
         CommonUtils ob = new CommonUtils();
         if(book == null){
             book =  ob.convertToModel(bookRequest);
+            book.setRemainingBooks(bookRequest.getTotalBooks());
         } else{
           updateBooksCount(book, bookRequest);
         }
@@ -40,16 +43,11 @@ public class BookService {
 
     @Transactional(rollbackOn = Exception.class)
     public List<Book> saveAll(List<BookRequest> bookRequests){
-        List<Book> books = new ArrayList<>();
-        try {
-            for (BookRequest bookRequest : bookRequests) {
-                books.add(save(bookRequest));
-            }
-        }
-        catch(Exception e){
-            log.error("{}", String.valueOf(e));
-        }
-        return books;
+        CommonUtils cu = new CommonUtils();
+        List<Book> books = bookRequests.stream().map(cu::convertToModel).collect(Collectors.toList());
+        log.info(bookRequests.stream().map(cu::convertToModel).toList().toString());
+        log.info(books.toString());
+        return bookRepository.saveAll(books);
     }
 
     public List<Book> findAll(){
@@ -57,6 +55,31 @@ public class BookService {
     }
 
     public Book findById(Long id){
-        return bookRepository.findById(id);
+        return bookRepository.findById(id).orElse(null);
+    }
+
+    public int deleteById(Long id){
+        List<Book> books = bookRepository.findAll()
+                .stream()
+                .filter(book -> Objects.equals(id, book.getId()))
+                .toList();
+        log.info(books.toString());
+        if(books.isEmpty()){
+            return -1;
+        }
+        bookRepository.deleteById(id);
+        return books.size();
+    }
+
+    public List<Book> findByGenre(String genre) {
+        return bookRepository.findByGenre(genre);
+    }
+
+    public List<Book> findByAuthor(String author) {
+        return bookRepository.findByAuthor(author);
+    }
+
+    public List<Book> findByPriceBetween(double minPrice, double maxPrice) {
+        return bookRepository.findByPriceBetween(minPrice, maxPrice);
     }
 }

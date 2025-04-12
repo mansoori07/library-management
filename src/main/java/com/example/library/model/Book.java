@@ -40,14 +40,9 @@ public class Book {
     @Column(name = "shelf_name")
     private String shelfName;
 
-//    @JsonIgnore
-//    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
-//    @JoinColumn(name = "shelf_id")
-//    private Shelf shelf;
-
     @JsonIgnore
-    @ManyToMany(mappedBy = "books", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<Member> members;
+    @OneToMany(mappedBy = "book", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<MemberBook> memberBooks;
 
 
     public Book(BookRequest bookRequest){
@@ -55,7 +50,6 @@ public class Book {
         this.genre = bookRequest.getGenre();
         this.author = bookRequest.getAuthor();
         this.price = bookRequest.getPrice();
-        this.members = bookRequest.getMembers();
         this.totalBooks =  bookRequest.getTotalBooks();
         this.remainingBooks = bookRequest.getRemainingBooks();
         this.shelfName = bookRequest.getShelfName();
@@ -67,7 +61,6 @@ public class Book {
         this.genre = book.getGenre();
         this.author = book.getAuthor();
         this.price = book.getPrice();
-        this.members = book.getMembers();
         this.totalBooks =  book.getTotalBooks();
         this.remainingBooks = book.getRemainingBooks();
         this.shelfName = book.getShelfName();

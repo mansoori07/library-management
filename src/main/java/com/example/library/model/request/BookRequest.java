@@ -1,16 +1,12 @@
 package com.example.library.model.request;
 
-import com.example.library.model.Book;
 import com.example.library.model.Member;
-import com.example.library.model.Shelf;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.*;
 import lombok.Data;
 
 import java.util.List;
 
 @Data
-public class BookRequest extends Book {
+public class BookRequest {
 
     private String name;
 
@@ -20,12 +16,10 @@ public class BookRequest extends Book {
 
     private double price;
 
-    private int originalQuantity;
+    private int totalBooks;
 
-    private int remainingQuantity;
+    private int remainingBooks;
 
-    private Shelf shelf;
-
-    private List<Member> members;
+    private String shelfName;
 
 }

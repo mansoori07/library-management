@@ -1,6 +1,5 @@
 package com.example.library.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -34,8 +33,5 @@ public class Address {
     @Column(name = "pin_code")
     private int pinCode;
 
-    @JsonIgnore
-    @OneToOne(mappedBy = "address", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Member member;
 
 }

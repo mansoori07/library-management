@@ -1,36 +1,16 @@
 package com.example.library.repository;
 
 import com.example.library.model.Book;
-import com.example.library.model.request.BookRequest;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Repository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-@Repository
-@RequiredArgsConstructor
-public class BookRepository {
+public interface BookRepository extends JpaRepository<Book, Long> {
+    Book findByName(String name);
 
-    private final IBookRepository bookRepository;
+    List<Book> findByGenre(String genre);
 
-    public Book save(Book book){
-        return bookRepository.save(book);
-    }
+    List<Book> findByPriceBetween(double min, double max);
 
-    public List<Book> saveAll(List<Book> books){
-        return bookRepository.saveAll(books);
-    }
-
-    public List<Book> findAll(){
-        return bookRepository.findAll();
-    }
-
-    public Book findById(Long id){
-        return bookRepository.findById(id)
-                .orElseThrow(() ->new RuntimeException("Book not found"));
-    }
-
-    public Book findByName(String name) {
-        return bookRepository.findByName(name);
-    }
+    List<Book> findByAuthor(String author);
 }

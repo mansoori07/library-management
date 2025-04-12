@@ -2,13 +2,24 @@ package com.example.library.utils;
 
 import com.example.library.enums.ShelfType;
 import com.example.library.model.Book;
+import com.example.library.model.Member;
+import com.example.library.model.Transaction;
 import com.example.library.model.request.BookRequest;
+import com.example.library.model.request.MemberRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
+import java.io.ByteArrayOutputStream;
+import java.util.List;
 
 @Slf4j
 @RequiredArgsConstructor
 public class CommonUtils {
+
+    public static byte[] generatePDF(List<Transaction> checkout) {
+
+        return new byte[10];
+    }
 
     public Book convertToModel(BookRequest bookRequest) {
         try {
@@ -65,5 +76,9 @@ public class CommonUtils {
         } catch(Exception ex){
             log.error("{}", String.valueOf(ex));
         }
+    }
+
+    public Member convertToMemberModel(MemberRequest memberRequest) {
+        return new Member(memberRequest);
     }
 }

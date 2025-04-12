@@ -12,7 +12,7 @@ public class AddressService {
     private final AddressRepository addressRepository;
 
     public Address findById(Long id){
-        return addressRepository.findById(id);
+        return addressRepository.findById(id).orElse(null);
     }
 
     public List<Address> findByCity(String city){
@@ -44,7 +44,12 @@ public class AddressService {
     }
 
     public int deleteById(Long id){
-        return addressRepository.deleteById(id);
+        Address address = addressRepository.findById(id).orElse(null);
+        if(address == null) {
+            throw new RuntimeException("Address not Found");
+        }
+        addressRepository.deleteById(id);
+        return 1;
     }
 
     public int deleteByCity(String city){
