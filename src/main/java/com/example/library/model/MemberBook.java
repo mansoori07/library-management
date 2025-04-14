@@ -19,4 +19,12 @@ public class MemberBook {
     @JoinColumn(name = "book_id")
     private Book book;
 
+    @Override
+    public String toString() {
+        return "MemberBook{" +
+                "id=" + id +
+                ", member=" + member.getId() +
+                ", book=" + book.getId() +
+                '}';
+    }
 }

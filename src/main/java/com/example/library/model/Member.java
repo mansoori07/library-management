@@ -30,12 +30,22 @@ public class Member {
     private String phoneNumber;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<MemberBook> memberBooks;
 
     public Member(MemberRequest memberRequest){
         this.name = memberRequest.getName();
         this.phoneNumber = memberRequest.getPhoneNumber();
         this.email = memberRequest.getEmail();
+    }
+
+    @Override
+    public String toString() {
+        return "Member{" +
+                "phoneNumber='" + phoneNumber + '\'' +
+                ", email='" + email + '\'' +
+                ", name='" + name + '\'' +
+                ", id=" + id +
+                '}';
     }
 }

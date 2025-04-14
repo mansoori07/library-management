@@ -26,71 +26,95 @@ public class TransactionService {
     private final MemberRepository memberRepository;
 
 
-    @Transactional
-    public String bookCheckout(Long bookId, Long memberId){
+    @Transactional(rollbackOn = Exception.class)
+    public String bookCheckOut(Long bookId, Long memberId){
 
-        try {
-            //1st check member
-            Member member = memberRepository.findById(memberId).orElse(null);
-            if (member == null)
-                return "Member with id " + memberId + " is not registered";
-            log.info("Member checked : {}", member);
+        //1st check member
+        Member member = memberRepository.findById(memberId).orElse(null);
+        if (member == null)
+            return "Member with id " + memberId + " is not registered";
+        log.info("Check out Member checked : {}", member);
 
-            //2nd check book
-            Book book = bookRepository.findById(bookId).orElse(null);
-            if (book == null)
-                return "Book with id " + bookId + " is not present.";
+        //2nd check book
+        Book book = bookRepository.findById(bookId).orElse(null);
+        if (book == null)
+            return "Book with id " + bookId + " is not present.";
+        log.info("Check out Book checked : {}", book);
 
-            log.info("Book checked : {}", book);
+        //3rd check memberBook
+        MemberBook memberBook = memberBookRepository.findByMemberIdAndBookId(memberId, bookId);
+        if (memberBook != null)
+            return member.getName() + " already have " + book.getName() + "book.";
+        log.info("Check out MemberBook checked is null");
 
-            //3rd check memberbook
-            MemberBook memberBook = memberBookRepository.findByMemberIdAndBookId(memberId, bookId);
-            if (memberBook != null)
-                return memberBook.getMember().getName() + " already have " + memberBook.getBook().getName() + "book.";
-            log.info("MemberBook checked {}", memberBook);
+        memberBook = new MemberBook();
 
-            memberBook = new MemberBook();
+        //update data
+        updateData(book, member, memberBook, "checkOut");
 
-            //update data
-            updateData(book, member, memberBook, "checkout");
+        log.info("/* --- After update data --- */ ");
+        log.info("Book : {} \n\n Member : {} \n\n MemberBook : {}", book, member, memberBook);
 
-            log.info("/* --- After update data --- */ ");
-            log.info("Book : {} \n\n Member : {} \n\n MemberBook : {}", book, member, memberBook);
+        bookRepository.save(book);
+        memberRepository.save(member);
+        memberBookRepository.save(memberBook);
 
-            bookRepository.save(book);
-            memberRepository.save(member);
-            memberBookRepository.save(memberBook);
-        } catch(Exception ex){
-            log.error("{}", String.valueOf(ex));
-            return "Failed with Exception";
-        }
+        log.info("New Member Data : {} and Book Data : {}",member.getMemberBooks(), book.getMemberBooks());
         return "SUCCESS";
     }
 
     //TODO: write for check in
-    public void checkin(){
-//        updateData(book, member, memberBook, "checkin");
+    @Transactional(rollbackOn = Exception.class)
+    public String bookCheckIn(Long bookId, Long memberId){
+
+        //1st check member
+        Member member = memberRepository.findById(memberId).orElse(null);
+        if (member == null)
+            return "Member with id " + memberId + " is not registered";
+        log.info("Member checked : {}", member);
+
+        //2nd check book
+        Book book = bookRepository.findById(bookId).orElse(null);
+        if (book == null)
+            return "Book with id " + bookId + " is not present.";
+        log.info("Book checked : {}", book);
+
+        //3rd check memberBook
+        MemberBook memberBook = memberBookRepository.findByMemberIdAndBookId(memberId, bookId);
+        if (memberBook == null)
+            return member.getName() + " doesn't have " + book.getName() + "book.";
+        log.info("MemberBook checked {}", memberBook);
+
+        updateData(book, member, memberBook, "checkIn");
+
+        bookRepository.save(book);
+        memberRepository.save(member);
+        
+        return "SUCCESS";
     }
 
     private void updateData(Book book, Member member, MemberBook memberBook, String transact) {
 
-        if(transact.equalsIgnoreCase("checkout")){
+        if(transact.equalsIgnoreCase("checkOut")){
             book.setRemainingBooks(book.getRemainingBooks()-1);
             memberBook.setBook(book);
             memberBook.setMember(member);
 
-            Transaction t = transactionRepository.save(new Transaction()
+            Transaction transaction = transactionRepository.save(new Transaction()
                     .setBookName(book.getName())
                     .setBookAuthor(book.getAuthor())
                     .setMemberName(member.getName())
                     .setMemberMobile(member.getPhoneNumber())
                     .setBorrowDate(new Date())
             );
-            log.info("Book Transaction saved : {}", t);
+            log.info("Book Transaction saved : {}", transaction);
         }
         else{
             book.setRemainingBooks(book.getRemainingBooks()+1);
-            //delete memberrepo where book id,
+            book.getMemberBooks().remove(memberBook);
+            member.getMemberBooks().remove(memberBook);
+            Transaction transaction = transactionRepository.findByBookNameAndMemberMobileAndReturnDate(book.getName(), member.getPhoneNumber(), null);
+            transactionRepository.save(transaction.setReturnDate(new Date()));
         }
 
     }

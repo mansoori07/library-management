@@ -1,9 +1,6 @@
 package com.example.library.model.request;
 
-import com.example.library.model.Member;
 import lombok.Data;
-
-import java.util.List;
 
 @Data
 public class BookRequest {
